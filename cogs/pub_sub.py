@@ -11,7 +11,7 @@ utc = datetime.timezone.utc
 time = datetime.time(hour=12, minute=00, tzinfo=utc)
 
 def get_subs():
-    url = "https://accessibleweeklyad.publix.com/PublixAccessibility/BrowseByListing/ByCategory/?ListingSort=8&StoreID=2500312&CategoryID=5232526"
+    url = "https://accessibleweeklyad.publix.com/PublixAccessibility/BrowseByListing/BySearch/?StoreID=2500312&SneakPeek=&searchtext=Publix+Deli"
     page = urlopen(url)
 
     html_bytes = page.read()
@@ -20,9 +20,9 @@ def get_subs():
     subs = []
 
     for item in soup.body.find(id='BrowseLayout').css.select('.title'):
-        if 'Sandwich' in str(item.h2.contents):
+        if 'Sub' in str(item.h2.contents) and 'Combo' not in str(item.h2.contents):
             # print(str(item.h2.contents))
-            m = re.search(r'\[\"(.*?)\"\]', str(item.h2.contents))
+            m = re.search(r'\[\'(.*?)\'\]', str(item.h2.contents))
             subs.append(m.group(1))
             
     return(subs)
