@@ -30,7 +30,7 @@ class Poll(commands.Cog):
             poll_message += f"{emoji} {option}\n\n"
             
         embed = discord.Embed(title = question, color = discord.Colour.random(), description = ''.join(poll_message))
-        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar)
+        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.display_avatar)
         embed_message = await ctx.send(embed=embed)
         embed.set_footer(text='Poll ID: {}'.format(embed_message.id))
         await embed_message.edit(embed=embed)

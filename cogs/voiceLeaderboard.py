@@ -72,13 +72,33 @@ class VoiceLeaderboard(commands.Cog):
         # Sort leaderboard
         leaderboard = sorted(userdata.items(), key=lambda x:x[1], reverse=True)
         
-        embed = discord.Embed(title=f"{ctx.message.guild.name} VC Leaderboard", color = discord.Colour.random(), description=f"Congrats {self.bot.get_user(int(leaderboard[0][0])).name}!")
-        embed.set_thumbnail(url=self.bot.get_user(int(leaderboard[0][0])).avatar)
+        embed = discord.Embed(title=f"{ctx.message.guild.display_name} VC Leaderboard", color = discord.Colour.random(), description=f"Congrats {self.bot.get_user(int(leaderboard[0][0])).display_name}!")
+        embed.set_thumbnail(url=self.bot.get_user(int(leaderboard[0][0])).display_avatar)
         for user in leaderboard:
-            embed.add_field(name=f"{self.bot.get_user(int(user[0])).name}", value=f"{user[1]['total_time']//60} Minutes", inline=False)
+            embed.add_field(name=f"{self.bot.get_user(int(user[0])).display_name}", value=f"{user[1]['total_time']//60} Minutes", inline=False)
 
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def time(self, ctx):
+        ''''
+        Print author's vc data
+        '''
+        with open('./data/vc_rank.json', 'r') as file:
+            voice_data = json.load(file)
+
+        guild_id = str(ctx.message.guild.id)
+        
+        try:
+            userdata = voice_data[guild_id][str(ctx.message.author.id)]
+        except:
+            await ctx.send("No time data! Try talking to more friends...")
+        
+        embed = discord.Embed(title=f"{ctx.message.author.display_name}'s VC Time", color = discord.Colour.random(), description=f"{userdata['total_time']//60} Minutes")
+        # embed.set_thumbnail(url=ctx.message.author.avatar)
+        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.display_avatar)
+
+        await ctx.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(VoiceLeaderboard(bot))

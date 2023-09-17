@@ -60,7 +60,7 @@ class PubSub(commands.Cog):
         for sub in subs:
             description += f'<:pub_sub:1150800487596183623> {sub}\n\n'
         embed = discord.Embed(title="This Week's Pub Sub Sale:", description=description, color = discord.Colour.random())
-        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar)
+        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.display_avatar)
         await ctx.send(embed=embed)
         
     @commands.command()

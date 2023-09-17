@@ -24,7 +24,7 @@ class Silly(commands.Cog):
             description = "gg"
             
         embed = discord.Embed(title = "Parry This You Filthy Casual!", color = discord.Colour.random(), description = description, thumbnail = "https://i.imgflip.com/2/1bupu2.jpg")
-        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar)
+        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.display_avatar)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -64,7 +64,7 @@ class Silly(commands.Cog):
                 embed = discord.Embed(title = f"{ctx.message.author.display_name} flips a coin!", description = f"Tails!", color = discord.Colour.random())
                 embed.set_thumbnail(url = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/2005_Penny_Rev_Unc_D.png/330px-2005_Penny_Rev_Unc_D.png")
         
-        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar)
+        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.display_avatar)
         await ctx.send(embed=embed)
 
 
@@ -76,7 +76,7 @@ class Silly(commands.Cog):
         """
         embed = discord.Embed(title = f"{ctx.message.author.display_name} is afraid.", description=f"The recent events in this server has caused {ctx.message.author.display_name} fear and anxiety.", color = discord.Colour.random())
         embed.set_thumbnail(url = "https://media.tenor.com/images/4f8714d8962c5e124799213482d32a1c/tenor.gif")
-        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar)
+        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.display_avatar)
         await ctx.send(embed=embed)
         
 async def setup(bot):

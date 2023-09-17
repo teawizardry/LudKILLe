@@ -69,7 +69,7 @@ class StarWars(commands.Cog):
         dice_img_path = f"./imgs/{dice_img}"
         dice_file = discord.File(dice_img_path, filename=dice_img)
         
-        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.avatar)
+        embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.display_avatar)
         embed.set_thumbnail(url=f"attachment://{dice_img}")
         
         await ctx.send(file=dice_file, embed=embed)
