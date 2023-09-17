@@ -3,11 +3,6 @@ import os
 import dotenv
 import discord
 from discord.ext import commands
-import json
-from json.decoder import JSONDecodeError
-from dyce import H, R
-import icepool
-from cogs.pub_sub import get_subs
 import asyncio
 
 dotenv_file = dotenv.find_dotenv()
