@@ -1,13 +1,15 @@
 import json
 import discord
 import time
+from collections import namedtuple
 import discord
 from discord.ext import commands
 
 class VoiceLeaderboard(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-                
+    
+
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
         '''
@@ -37,10 +39,15 @@ class VoiceLeaderboard(commands.Cog):
             userdata = voice_data[guild_id][new_user]
 
         # check if user is joining or leaving a vc
-        if(before.channel == None) or (str(before.channel.guild.id) != guild_id): # join a vc or switch guilds
+        if(before.channel == None) or (str(before.channel.guild.id) != guild_id) or before.afk: # join a vc or switch guilds
             userdata["join_time"] = round(time.time())
         elif(after.channel != None): # changed vc within the same guild, mute/deafen events 
             if before.channel.guild.id == after.channel.guild.id:
+                if after.afk == True:
+                    userdata["total_time"] += round(time.time()) - userdata["join_time"]
+                    userdata["join_time"] = None # preventive measure against errors
+                    with open('data/vc_rank.json', 'w') as update_user_data:
+                        json.dump(voice_data, update_user_data, indent=4)
                 return
             else:
                 new_guild = after.channel.guild.id
@@ -81,6 +88,12 @@ class VoiceLeaderboard(commands.Cog):
 
     @commands.command()
     async def time(self, ctx):
+        def normalize_seconds(seconds: int) -> tuple:
+            (days, remainder) = divmod(seconds, 86400)
+            (hours, remainder) = divmod(remainder, 3600)
+            (minutes, seconds) = divmod(remainder, 60)
+            return namedtuple("_", ("d", "h", "m", "s"))(days, hours, minutes, seconds)
+                    
         ''''
         Print author's vc data
         '''
@@ -94,7 +107,8 @@ class VoiceLeaderboard(commands.Cog):
         except:
             await ctx.send("No time data! Try talking to more friends...")
         
-        embed = discord.Embed(title=f"{ctx.message.author.display_name}'s VC Time", color = discord.Colour.random(), description=f"{userdata['total_time']//60} Minutes")
+        total_time = normalize_seconds(userdata['total_time'])
+        embed = discord.Embed(title=f"{ctx.message.author.display_name}'s VC Time", color = discord.Colour.random(), description=f"{int(total_time.d)} Days {int(total_time.h)} Hours {int(total_time.m)} Minutes {int(total_time.s)} Seconds")
         # embed.set_thumbnail(url=ctx.message.author.avatar)
         embed.set_author(name=ctx.message.author.display_name, icon_url=ctx.message.author.display_avatar)
 
